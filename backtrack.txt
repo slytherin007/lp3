@@ -1,0 +1,49 @@
+
+def solveNQUtil(board, col):
+    global N, ld, rd, cl
+    if col >= N:
+        return True
+    for i in range(N):
+        if (ld[i - col + N - 1] != 1 and
+            rd[i + col] != 1 and
+            cl[i] != 1):
+
+            board[i][col] = 1
+            ld[i - col + N - 1] = rd[i + col] = cl[i] = 1
+
+            if solveNQUtil(board, col + 1):
+                return True
+
+            board[i][col] = 0  # BACKTRACK
+            ld[i - col + N - 1] = rd[i + col] = cl[i] = 0
+    return False
+
+
+def solveNQ():
+    global N
+    board = [[0 for _ in range(N)] for _ in range(N)]
+    if solveNQUtil(board, 0) is False:
+        print("Solution does not exist")
+        return False
+    print("Solution exists. The placement of queens on the board:")
+    printSolution(board)
+    return True
+
+
+
+def printSolution(board):
+    global N
+    for i in range(N):
+        for j in range(N):
+            print(board[i][j], end=" ")
+        print()
+
+
+# Driver Code
+if __name__ == '__main__':
+    N = int(input("Enter the size of the chessboard (N): "))
+    ld = [0] * (2 * N - 1)
+    rd = [0] * (2 * N - 1)
+    cl = [0] * N
+    
+    solveNQ()
